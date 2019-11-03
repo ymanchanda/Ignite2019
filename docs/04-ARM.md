@@ -16,7 +16,6 @@
   - "[concat('foo', parameters('blah'), '-commands')]
 - depending on how you choose to define your resource names you may need to make other changes, be sure to review the whole thing
 - you can test it out using the Cloud Shell in the azure portal (upload the template to the cloud shell)
-  - Set-AzContext "DevOps CAT Workshops"
   - New-AzResourceGroup -Name "024dylantest" -Location "westus2"
   - New-AzResourceGroupDeployment -ResourceGroupName "024dylantest" -TemplateFile "ArmTemplate.json" -appname "024dylantest"
 
