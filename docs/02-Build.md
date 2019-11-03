@@ -11,7 +11,7 @@
 - Be sure to check Include Administrators
 
 ## Create, Submit, and Complete a Pull Request
-- Suggest changing this file: src/PokerLeagueManager.UI.Web/angular/src/navbar/navbar.component.html
+- Suggest changing this file: src/PokerLeagueManager.UI.Web/angular/src/app/navbar/navbar.component.html
 - Add some text after "Recent Games", we'll be able to see this change later after we deploy
 
 ## Update build to Publish Build Artifacts
