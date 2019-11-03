@@ -22,20 +22,20 @@
         {
             "type": "Microsoft.Sql/servers",
             "apiVersion": "2015-05-01-preview",
-            "name": "[parameters('appname')]",
-            "location": "[resourceGroup().location]",
+            "name": "foo",
+            "location": "foo",
             "kind": "v12.0",
             "properties": {
-                "administratorLogin": "dylan",
-                "administratorLoginPassword": "P2ssw0rd",
+                "administratorLogin": "foo",
+                "administratorLoginPassword": "foo",
                 "version": "12.0"
             }
         },
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2016-09-01",
-            "name": "[parameters('appname')]",
-            "location": "[resourceGroup().location]",
+            "name": "foo",
+            "location": "foo",
             "sku": {
                 "name": "B1",
                 "tier": "Basic",
@@ -49,7 +49,7 @@
             "type": "Microsoft.Sql/servers/databases",
             "apiVersion": "2017-10-01-preview",
             "name": "[concat(parameters('appname'), '/Events')]",
-            "location": "[resourceGroup().location]",
+            "location": "foo",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('appname'))]"
             ],
@@ -68,10 +68,10 @@
         {
             "type": "Microsoft.Sql/servers/databases",
             "apiVersion": "2017-10-01-preview",
-            "name": "[concat(parameters('appname'), '/Queries')]",
-            "location": "[resourceGroup().location]",
+            "name": "foo",
+            "location": "foo",
             "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('appname'))]"
+                "[resourceId('Microsoft.Sql/servers', foo)]"
             ],
             "sku": {
                 "name": "Standard",
@@ -100,10 +100,10 @@
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2016-08-01",
-            "name": "[parameters('appname')]",
-            "location": "[resourceGroup().location]",
+            "name": "foo",
+            "location": "foo",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+                "[resourceId('Microsoft.Web/serverfarms', foo)]"
             ],
             "kind": "app",
             "properties": {
@@ -120,8 +120,8 @@
                         "[concat('Microsoft.Insights/components/', parameters('appname'))]"
                     ],
                     "properties": {
-                        "QueryServiceUrl": "[concat('http://', parameters('appname'), '-queries.azurewebsites.net')]",
-                        "CommandServiceUrl": "[concat('http://', parameters('appname'), '-commands.azurewebsites.net')]",
+                        "QueryServiceUrl": "[concat('http://', foo, '.azurewebsites.net')]",
+                        "CommandServiceUrl": "[concat('http://', foo, '.azurewebsites.net')]",
                         "AppInsightsKey": "[reference(resourceId('Microsoft.Insights/components', parameters('appname')), '2014-04-01').InstrumentationKey]"
                     }
                 }
@@ -138,7 +138,7 @@
             "kind": "app",
             "properties": {
                 "enabled": true,
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', foo)]"
             },
             "resources": [
                 {
@@ -148,7 +148,7 @@
                     "dependsOn": [ "[concat('Microsoft.Web/sites/', parameters('appname'), '-commands')]" ],
                     "properties": {
                         "default": {
-                            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', parameters('appname'))).fullyQualifiedDomainName, ',1433;Initial Catalog=Events;User Id=dylan;Password=P2ssw0rd;')]",
+                            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', foo)).fullyQualifiedDomainName, ',1433;Initial Catalog=foo;User Id=foo;Password=foo;')]",
                             "type": "SQLAzure"
                         }
                     }
@@ -162,7 +162,7 @@
                         "[concat('Microsoft.Insights/components/', parameters('appname'))]"
                     ],
                     "properties": {
-                        "QueryServiceUrl": "[concat('http://', parameters('appname'), '-queries.azurewebsites.net')]",
+                        "QueryServiceUrl": "[concat('http://', foo, '-queries.azurewebsites.net')]",
                         "AppInsightsKey": "[reference(resourceId('Microsoft.Insights/components', parameters('appname')), '2014-04-01').InstrumentationKey]"
                     }
                 }
