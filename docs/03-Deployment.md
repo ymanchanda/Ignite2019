@@ -48,8 +48,12 @@
   - 4x Deploy Azure App Service
   - 2x Deploy SQL Azure Dacpac
   - 2x Command Line
+- When it asks you to create a service connection to azure, click the link to use the full version of hte dialog and use the service principal credentials provided (not your username password, but the App ID, Client Secret below)
+  - App ID: aa64a29d-6f6a-48b1-b4d9-1c189e38b295
+  - Client Secret: Ig7kxJdTg9lW@l5g1_[@/2xNLDEs9zQ6
 - For the App Service deploys you point it at the Zip file in your build artifacts
 - For the DB deploys you point it at the dacpac file
+  - You should pass in /p:CreateNewDatabase=true as an additional arg when deploying the databases
 - The first command-line task is to register the Events Service as a Subscriber (replace tokens with your values)
   - PokerLeagueManager.Utilities.exe CreateEventSubscriber {your database server}.database.windows.net {your events database name} {db admin user} {db admin password} http://{events service}.azurewebsites.net
 - The 2nd command-line task is to generate some sample data - this will also tell you if everything is working right
