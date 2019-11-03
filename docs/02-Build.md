@@ -22,3 +22,4 @@
   - The /deploy folder
   - The build outputs of the PokerLeagueManager.Utilities project (path will be something like /src/PokerLeagueManager.Utilties/bin/Debug)
   - Try and make the build drop clean (see projector slide for example)
+- some useful built-in pipeline variables $(Build.SourcesDirectory), $(Build.ArtifactStagingDirectory)
