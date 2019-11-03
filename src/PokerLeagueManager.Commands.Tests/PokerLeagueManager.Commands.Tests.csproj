@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.3\build\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.3\build\Microsoft.CodeAnalysis.Analyzers.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B1827067-9FB2-4023-B4E9-75F21F71468A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PokerLeagueManager.Commands.Tests</RootNamespace>
+    <AssemblyName>PokerLeagueManager.Commands.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>..\PokerLeagueManager.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.10.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.10.1\lib\net45\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="AddPlayerToGame\AddDeletedPlayerToGameTest.cs" />
+    <Compile Include="AddPlayerToGame\AddPlayerToGameInvalidPlayerIdTest.cs" />
+    <Compile Include="AddPlayerToGame\AddPlayerToDeletedGameTest.cs" />
+    <Compile Include="AddPlayerToGame\AddPlayerToGameInvalidGameIdTest.cs" />
+    <Compile Include="AddPlayerToGame\AddPlayerToGameTwiceTest.cs" />
+    <Compile Include="AddPlayerToGame\AddPlayerToGameTest.cs" />
+    <Compile Include="AddRebuy\AddRebuyDeletedGameTest.cs" />
+    <Compile Include="AddRebuy\AddRebuyInvalidGameIdTest.cs" />
+    <Compile Include="AddRebuy\AddRebuyInvalidPlayerTest.cs" />
+    <Compile Include="AddRebuy\AddRebuyTest.cs" />
+    <Compile Include="CreateGame\CreateGameInvalidGameDateTest.cs" />
+    <Compile Include="CreateGame\CreateGameAfterDeletingTest.cs" />
+    <Compile Include="CreateGame\CreateGameWithDuplicateDateTest.cs" />
+    <Compile Include="CreateGame\CreateGameWithDuplicateGameIdTest.cs" />
+    <Compile Include="CreateGame\CreateGameWithGameIdTest.cs" />
+    <Compile Include="CreateGame\CreateGameTest.cs" />
+    <Compile Include="CreatePlayer\CreatePlayerAfterDeletingTest.cs" />
+    <Compile Include="CreatePlayer\CreatePlayerWithEmptyNameTest.cs" />
+    <Compile Include="CreatePlayer\CreatePlayerTest.cs" />
+    <Compile Include="CreatePlayer\CreatePlayerWithDuplicateNameCaseInsensitiveTest.cs" />
+    <Compile Include="CreatePlayer\CreatePlayerWithDuplicateNameTest.cs" />
+    <Compile Include="CreatePlayer\CreatePlayerWithDuplicatePlayerIdTest.cs" />
+    <Compile Include="CreatePlayer\CreatePlayerWithPlayerIdTest.cs" />
+    <Compile Include="DeleteGame\DeleteGameTwiceTest.cs" />
+    <Compile Include="DeleteGame\DeleteGameInvalidGameIdTest.cs" />
+    <Compile Include="DeleteGame\DeleteGameTest.cs" />
+    <Compile Include="DeletePlayer\DeletePlayerTest.cs" />
+    <Compile Include="DeletePlayer\DeletePlayerTwiceTest.cs" />
+    <Compile Include="DeletePlayer\DeletePlayerInvalidPlayerIdTest.cs" />
+    <Compile Include="GameCompleted\GameCompletedThenRemoveRebuyTest.cs" />
+    <Compile Include="GameCompleted\GameCompletedThenRemovePlayerFromGameTest.cs" />
+    <Compile Include="GameCompleted\GameCompletedThenAddRebuyTest.cs" />
+    <Compile Include="GameCompleted\GameCompletedThenAddPlayerTest.cs" />
+    <Compile Include="GameCompleted\GameCompletedThenUnKnockoutPlayerTest.cs" />
+    <Compile Include="Infrastructure\BaseCommandTest.cs" />
+    <Compile Include="Infrastructure\EventCommandPair.cs" />
+    <Compile Include="Infrastructure\FakeEventRepository.cs" />
+    <Compile Include="Infrastructure\VerifyEventsNow.cs" />
+    <Compile Include="GameCompleted\GameCompletedTest.cs" />
+    <Compile Include="PayoutsCalculated\PayoutsCalculated60To300For2018Test.cs" />
+    <Compile Include="PayoutsCalculated\PayoutsCalculatedPlayerRemovedTest.cs" />
+    <Compile Include="PayoutsCalculated\PayoutsCalculatedOnePlayerTest.cs" />
+    <Compile Include="UnKnockoutPlayer\UnKnockoutPlayerNotKnockedOutTest.cs" />
+    <Compile Include="UnKnockoutPlayer\UnKnockoutPlayerDeletedGameTest.cs" />
+    <Compile Include="UnKnockoutPlayer\UnKnockoutPlayerInvalidGameIdTest.cs" />
+    <Compile Include="UnKnockoutPlayer\UnKnockoutPlayerInvalidPlayerTest.cs" />
+    <Compile Include="UnKnockoutPlayer\UnKnockoutPlayerTest.cs" />
+    <Compile Include="KnockoutPlayer\KnockoutPlayerTest.cs" />
+    <Compile Include="KnockoutPlayer\KnockoutPlayerDeletedGameTest.cs" />
+    <Compile Include="KnockoutPlayer\KnockoutPlayerInvalidGameIdTest.cs" />
+    <Compile Include="KnockoutPlayer\KnockoutPlayerInvalidPlayerTest.cs" />
+    <Compile Include="KnockoutPlayer\KnockoutPlayerAlreadyKnockedOutTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemovePlayerFromGame\RemovePlayerFromGameInvalidPlayerTest.cs" />
+    <Compile Include="RemovePlayerFromGame\RemovePlayerFromGameTest.cs" />
+    <Compile Include="RemoveRebuy\RemoveRebuyDeletedGameTest.cs" />
+    <Compile Include="RemoveRebuy\RemoveRebuyInvalidGameIdTest.cs" />
+    <Compile Include="RemoveRebuy\RemoveRebuyNotEnoughRebuysTest.cs" />
+    <Compile Include="RemoveRebuy\RemoveRebuyInvalidPlayerTest.cs" />
+    <Compile Include="RemoveRebuy\RemoveRebuyTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PokerLeagueManager.Commands.Domain\PokerLeagueManager.Commands.Domain.csproj">
+      <Project>{d702bdb7-9f99-4509-82af-632689aff7d0}</Project>
+      <Name>PokerLeagueManager.Commands.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PokerLeagueManager.Common.Tests\PokerLeagueManager.Common.Tests.csproj">
+      <Project>{8ade28f5-e0e5-4130-b882-28958bbf6ee0}</Project>
+      <Name>PokerLeagueManager.Common.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PokerLeagueManager.Common\PokerLeagueManager.Common.csproj">
+      <Project>{de404a65-ab5d-409f-bb18-919ef139b4c9}</Project>
+      <Name>PokerLeagueManager.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PokerLeagueManager.Queries.Core\PokerLeagueManager.Queries.Core.csproj">
+      <Project>{7c0d835a-1cda-41da-b203-b0ee2f17063a}</Project>
+      <Name>PokerLeagueManager.Queries.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\PokerLeagueManager.Models\PokerLeagueManager.layerdiagram">
+      <Link>PokerLeagueManager.layerdiagram</Link>
+      <Visible>False</Visible>
+    </AdditionalFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.Unstable.1.1.1.61\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.Unstable.1.1.1.61\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\PokerLeagueManager.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\common.props" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.3\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.3\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

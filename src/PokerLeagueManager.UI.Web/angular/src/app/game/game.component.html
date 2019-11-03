@@ -1,0 +1,34 @@
+<mat-expansion-panel #expPanel class="game" [class.game-small]="isScreenSmall()">
+  <!-- The (click) is an ugly hack because (opened) on the panel doesn't work in prod mode https://github.com/angular/material2/issues/7172 -->
+  <mat-expansion-panel-header (click)="expPanel.expanded && GameExpanded()">
+    <mat-panel-title>
+      <div class="game-date">{{ game.GameDate | amUtc | amDateFormat:'LL' }}</div>
+      <div class="game-winner">{{ game.Winner }} ({{ game.Winnings | currency:'USD':true:'1.0-0' }})</div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <mat-table #table [dataSource]="Players">
+    <ng-container matColumnDef="Placing">
+    <mat-header-cell [class.mat-column-Placing-small]="isScreenSmall()" *matHeaderCellDef></mat-header-cell>
+    <mat-cell [class.mat-column-Placing-small]="isScreenSmall()" *matCellDef="let element">{{element.Placing}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="PlayerName">
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.PlayerName}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Winnings">
+    <mat-header-cell *matHeaderCellDef>{{ isScreenSmall() ? 'Win' : 'Winnings' }}</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.Winnings | currency:'USD':true:'1.0-0'}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="PayIn">
+    <mat-header-cell *matHeaderCellDef>{{ isScreenSmall() ? 'Pay' : 'Pay In' }}</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.PayIn | currency:'USD':true:'1.0-0'}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</mat-expansion-panel>

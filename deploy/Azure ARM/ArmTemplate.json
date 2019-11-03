@@ -1,0 +1,300 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appname": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
+            "name": "[parameters('appname')]",
+            "location": "[resourceGroup().location]",
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web",
+                "Request_Source": "IbizaWebAppExtensionCreate"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[parameters('appname')]",
+            "location": "[resourceGroup().location]",
+            "kind": "v12.0",
+            "properties": {
+                "administratorLogin": "dylan",
+                "administratorLoginPassword": "P2ssw0rd",
+                "version": "12.0"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "name": "[parameters('appname')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "app"
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2017-10-01-preview",
+            "name": "[concat(parameters('appname'), '/Events')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('appname'))]"
+            ],
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 20
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 268435456000,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2017-10-01-preview",
+            "name": "[concat(parameters('appname'), '/Queries')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('appname'))]"
+            ],
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 20
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 268435456000,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[concat(parameters('appname'), '/AllowAllWindowsAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('appname'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2016-08-01",
+            "name": "[parameters('appname')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+            ],
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "appsettings",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', parameters('appname'))]",
+                        "[concat('Microsoft.Insights/components/', parameters('appname'))]"
+                    ],
+                    "properties": {
+                        "QueryServiceUrl": "[concat('http://', parameters('appname'), '-queries.azurewebsites.net')]",
+                        "CommandServiceUrl": "[concat('http://', parameters('appname'), '-commands.azurewebsites.net')]",
+                        "AppInsightsKey": "[reference(resourceId('Microsoft.Insights/components', parameters('appname')), '2014-04-01').InstrumentationKey]"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('appname'), '-commands')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+            ],
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "connectionstrings",
+                    "dependsOn": [ "[concat('Microsoft.Web/sites/', parameters('appname'), '-commands')]" ],
+                    "properties": {
+                        "default": {
+                            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', parameters('appname'))).fullyQualifiedDomainName, ',1433;Initial Catalog=Events;User Id=dylan;Password=P2ssw0rd;')]",
+                            "type": "SQLAzure"
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "appsettings",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', parameters('appname'), '-commands')]",
+                        "[concat('Microsoft.Insights/components/', parameters('appname'))]"
+                    ],
+                    "properties": {
+                        "QueryServiceUrl": "[concat('http://', parameters('appname'), '-queries.azurewebsites.net')]",
+                        "AppInsightsKey": "[reference(resourceId('Microsoft.Insights/components', parameters('appname')), '2014-04-01').InstrumentationKey]"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('appname'), '-events')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+            ],
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "connectionstrings",
+                    "dependsOn": [ "[concat('Microsoft.Web/sites/', parameters('appname'), '-events')]" ],
+                    "properties": {
+                        "default": {
+                            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', parameters('appname'))).fullyQualifiedDomainName, ',1433;Initial Catalog=Queries;User Id=dylan;Password=P2ssw0rd;')]",
+                            "type": "SQLAzure"
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "appsettings",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', parameters('appname'), '-events')]",
+                        "[concat('Microsoft.Insights/components/', parameters('appname'))]"
+                    ],
+                    "properties": {
+                        "AppInsightsKey": "[reference(resourceId('Microsoft.Insights/components', parameters('appname')), '2014-04-01').InstrumentationKey]"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('appname'), '-queries')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+            ],
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appname'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "connectionstrings",
+                    "dependsOn": [ "[concat('Microsoft.Web/sites/', parameters('appname'), '-queries')]" ],
+                    "properties": {
+                        "default": {
+                            "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', parameters('appname'))).fullyQualifiedDomainName, ',1433;Initial Catalog=Queries;User Id=dylan;Password=P2ssw0rd;')]",
+                            "type": "SQLAzure"
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "appsettings",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', parameters('appname'), '-queries')]",
+                        "[concat('Microsoft.Insights/components/', parameters('appname'))]"
+                    ],
+                    "properties": {
+                        "AppInsightsKey": "[reference(resourceId('Microsoft.Insights/components', parameters('appname')), '2014-04-01').InstrumentationKey]"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('appname'), '/web')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('appname'))]"
+            ],
+            "properties": {
+                "netFrameworkVersion": "v4.0"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('appname'), '-commands/web')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', concat(parameters('appname'), '-commands'))]"
+            ],
+            "properties": {
+                "netFrameworkVersion": "v4.0"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('appname'), '-events/web')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', concat(parameters('appname'), '-events'))]"
+            ],
+            "properties": {
+                "netFrameworkVersion": "v4.0"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(parameters('appname'), '-queries/web')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', concat(parameters('appname'), '-queries'))]"
+            ],
+            "properties": {
+                "netFrameworkVersion": "v4.0"
+            }
+        }
+    ]
+}
